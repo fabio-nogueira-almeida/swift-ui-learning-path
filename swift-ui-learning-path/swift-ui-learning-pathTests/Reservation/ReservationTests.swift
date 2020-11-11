@@ -67,7 +67,7 @@ class ReservationTests: XCTestCase {
 	}
 	
 	func testShouldCalcuteDiaryPriceForExclusiveWeekend() {
-		let hotels = ()
+		let hotels = HotelProvider()
 		let sut = hotels.availables?.first
 		
 		let dateFormatter = DateFormatter()
@@ -82,14 +82,17 @@ class ReservationTests: XCTestCase {
 	func testShouldFindTheChepeastHotelBetweenDates() {
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy-MM-dd"
-		
+
 		let startDate = dateFormatter.date(from: "2020-03-16")!
 		let endDate = dateFormatter.date(from: "2020-03-18")!
-		
+
 		let sut = ReservationViewModel(data: HotelProvider().availables!)
-		let hotel = sut.getChepeast(from: startDate, to: endDate)
+		sut.state.checkInDate = startDate
+		sut.state.checkOutDate = endDate
 		
-		XCTAssertEqual(hotel.name , "Parque das flores")
+		sut.bestHotelAction()
+
+		XCTAssertEqual(sut.state.chepeastHotelName , "Parque das flores")
 	}
 	
 	func testShouldFindTheChepeastHotelBetweenDatesSample2() {
@@ -100,9 +103,12 @@ class ReservationTests: XCTestCase {
 		let endDate = dateFormatter.date(from: "2020-03-22")!
 		
 		let sut = ReservationViewModel(data: HotelProvider().availables!)
-		let hotel = sut.getChepeast(from: startDate, to: endDate)
+		sut.state.checkInDate = startDate
+		sut.state.checkOutDate = endDate
 		
-		XCTAssertEqual(hotel.name , "Jardim Botânico")
+		sut.bestHotelAction()
+
+		XCTAssertEqual(sut.state.chepeastHotelName , "Jardim Botânico")
 	}
 	
 	// MARK: - ReservationViewModel
@@ -115,12 +121,18 @@ class ReservationTests: XCTestCase {
 		let endDate = dateFormatter.date(from: "2020-03-28")!
 		
 		let sut = ReservationViewModel(data: HotelProvider().availables!)
-		let hotel = sut.getChepeast(from: startDate, to: endDate, exclusive: true)
+		sut.state.checkInDate = startDate
+		sut.state.checkOutDate = endDate
+		sut.state.isRewardClient = true
 		
-		XCTAssertEqual(hotel.name , "Mar Atlântico")
+		sut.bestHotelAction()
+		
+		XCTAssertEqual(sut.state.chepeastHotelName , "Mar Atlântico")
 	}
 	
 	// MARK: - ReservationView
+	
+	//TODO
 
 }
 

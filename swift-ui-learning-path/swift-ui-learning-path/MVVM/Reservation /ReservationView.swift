@@ -15,10 +15,6 @@ struct ReservationView: View {
 	
 	@ObservedObject private var viewModel: ReservationViewModel
 	
-	@State private var checkInDate = Date()
-	@State private var checkOutDate = Date()
-	@State private var isRewardClient = false
-	
 	// MARK: - Initialize
 	
 	init(viewModel: ReservationViewModel) {
